@@ -1,0 +1,37 @@
+services:
+  app-rule-engine:
+    build: 
+      context: .
+    ports:
+      - "8081:6969"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/zeotapdb
+      SPRING_DATASOURCE_USERNAME: mayank
+      SPRING_DATASOURCE_PASSWORD: zeotap
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: mayank
+      POSTGRES_PASSWORD: zeotap
+      POSTGRES_DB: zeotapdb
+    ports:
+      - "5431:5432" 
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+
+  pgadmin:
+    image: dpage/pgadmin4:latest  
+    container_name: pgadmin  
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mayank@zeotap.com  
+      PGADMIN_DEFAULT_PASSWORD: zeotap  
+    ports:
+      - "80:80"  
+    networks:
+      - zeotapnetwork  
+volumes:
+  pgdata:
+networks:
+  zeotapnetwork:
